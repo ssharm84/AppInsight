@@ -1,0 +1,65 @@
+App Insight - is one of the most powerful feature of Azure where we can:
+1.Monitor our intake requests using Live Stream and Application Map
+2.Check for Logs using Sample telemetry in Live Stream or Logs section in Overview of App Insight
+3.Find RCA using Application map-Application Map->Failures->End to end Transaction details->Exception->Check-Just my code-this will show that in which line the error is made...It provides suggestions too.
+4.Monitor Performance and logs using Chart
+
+Practical:
+1.Create a Resource->Web App
+2.Resource Group-appInsight
+3.Instance Name - myAppInsight
+4.Monitoring - Yes to Application Insight....Create
+5.This will create my App Service which is my hosting environment for my front end application. The other Application Insight that will automatically
+be tied to this app service
+
+6.Go To Resource->Click Resource Group->myAppInsight and you can see Connection Key & Instrumentation key
+7.Go back to AppService-myAppInsight
+8.folder->dotnet new mvc -o myAppInsight
+9.cd myAppInsight
+10.code .
+11.dotnet add package Microsoft.ApplicationInsights.AspNetCore
+12.Inside appsettings.Development.json:
+	"ApplicationInsights": {
+    "InstrumentationKey": "<app_insights_instrumentation_key>"
+  }
+13.Inside Startup.cs->ConfigureServices-services.AddApplicationInsightsTelemetry();//Server side monitoring
+14.For client side monitoring: Go to Views->Shared->_Layout.cshtml,Inside head:
+	@Html.Raw(JavaScriptSnippet.FullScript)
+and inside _ViewImports.cshtml:
+	@inject Microsoft.ApplicationInsights.AspNetCore.JavaScriptSnippet JavaScriptSnippet
+
+15.Create demoController.cs
+16.Index.cshtml,add script
+
+17.Deployment to Azure process:
+VSCode->Azure on left->App Service->myAppInsight->Rightclick->Deploy to App Service->Browse
+
+Go to azure->Application Insights(myAppInsight)->Live Metrics...Open application page and keep on clicking and check Live metric
+Go to Application map to check for the instances and calls made.
+We can check for the performance and monitoring and logs using Application Insight
+
+Second Example:
+Create a new resource->Function app->Create->Select appInsight as Resource Group
+In Monitoring tab,Enable Application Insights as Yes and choose the existing Application Insights and click Review + Create
+Go to Resource->Click Functions and select Develop In Portal as Development environment,Http Trigger ->Create->Go to Code+Test
+Again check for Incoming Requests logs on Live Metrics and logs can be seen on the right side of Live Metrics in Sample telemetry
+You can run the function or call the function by getting url from the function code page.
+In demoController of application, paste the url in line 16
+Uncomment section in Get method
+Again right click on App Service->appInsight and Deploy it.
+
+Now copy queue related code and paste it in function app
+
+So, every call that we make to our application creates a blot storage which can be seen in 
+
+Monitoring can be done using:
+1.Application Insights
+2.Live Metrics
+3.Logs
+
+Suppose our application is not working on calling the function, then to diagnose it, either go to Live Stream and see Sample Telemetry
+or get into Application Map and you can see the kind of issue that has taken place and that too in which
+function.Application Map->Failures->End to end Transaction details->Exception->Check-Just my code-this will show that in which line the error is made...It provides suggestions too
+
+Logs can be seen through Application Insights->Overview->Logs
+
